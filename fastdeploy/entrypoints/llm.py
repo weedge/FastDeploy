@@ -103,6 +103,7 @@ class LLM:
         while True:
             try:
                 results = self.llm_engine._get_generated_result()
+                print(results)
                 for request_id, contents in results.items():
                     with self.mutex:
                         for result in contents:
