@@ -89,7 +89,7 @@ class LLM:
         self._receive_output_thread = threading.Thread(
             target=self._receive_output, daemon=True)
         self._receive_output_thread.start()
-    
+
     def _check_master(self):
         """
         Check if the current node is the master node.
@@ -103,8 +103,8 @@ class LLM:
         while True:
             try:
                 results = self.llm_engine._get_generated_result()
-                print(results)
                 for request_id, contents in results.items():
+                    print(request_id, contents)
                     with self.mutex:
                         for result in contents:
                             if request_id not in self.req_output:
@@ -197,7 +197,7 @@ class LLM:
         if not self._check_master():
             err_msg = f"Only master node can accept completion request, please send request to master node: {self.master_node_ip}"
             raise ValueError(err_msg)
-        
+
         if sampling_params is None:
             sampling_params = self.default_sampling_params
 
@@ -363,6 +363,6 @@ if __name__ == "__main__":
                           sampling_params=[
                               SamplingParams(temperature=1, max_tokens=50),
                               SamplingParams(temperature=1, max_tokens=20)
-                          ],
-                          use_tqdm=True)
+    ],
+        use_tqdm=True)
     print(output)
